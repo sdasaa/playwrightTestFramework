@@ -1,0 +1,18 @@
+[
+    {
+        "allProducts" : ["ADIDAS ORIGINAL","ZARA COAT 3","iphone 13 pro"],
+        "productToSelect" : "iphone 13 pro",
+        "quantity" : "1",
+        "ccDetails" : {
+            "ccNumber" : "4542 9931 9292 2293",
+            "expiry" : {
+                "month" : "09",
+                "year" : "27"
+            },
+            "cvvCode" : "619",
+            "nameOnCard": "herbert schwabsky",
+            "couponToApply" : "rahulshettyacademy"
+        },
+        "country" : "United States"
+    }   
+]
