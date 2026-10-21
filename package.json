@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test" : "npx playwright test"
+    "test": "npx playwright test ./tests/api/loginApi.spec.ts",
+    "test:single" : "npx playwright test ./tests/ui/functional/standAlone/differentWebElementTest.spec.ts --project=chrome",
+    "test:singlePom" : "npx playwright test ./tests/ui/functional/pageObjects/E2EShoppingFlow.spec.ts --project=chrome",
+    "test:ui:localChrome": "npx playwright test ./tests/ui/functional/pageObjects/E2EShoppingFlow.spec.ts --project=localChromeBrowser",
+    "test:api:auth": "npx playwright test ./tests/api/authApi.spec.ts --project=api"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +16,10 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.9.2"
+    "@types/node": "^25.9.2",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.12.1",
+    "winston": "^3.19.0",
+    "dotenv": "^17.2.4"
   }
 }

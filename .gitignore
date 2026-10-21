@@ -1,0 +1,12 @@
+# dependencies
+node_modules
+
+# Reports
+allure-results*
+test-results
+playwright-report
+
+# Custom 
+.zObsolete
+**.js
+**simple*.yml

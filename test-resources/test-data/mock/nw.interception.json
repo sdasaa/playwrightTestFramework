@@ -1,0 +1,14 @@
+{
+    "nwInterception" : {
+        "fullfill" : {
+            "urlToIntercept" : "/get-orders-for-customer"
+        },
+        "continue" : {
+            "urlToIntercept" : "/get-orders-for-customer",
+            "unAuthorizedUserID" : "6a23c0b617ee3e78babfe5dd"
+        },
+        "abort" : {
+            "urlToIntercept" : "/get-orders-for-customer"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "createOrderApiReq" : {
+        "orders": [
+            {
+                "country": "United States",
+                "productOrderedId": "{{productID}}"
+            }
+        ]
+    },
+
+    "updateAnOrderApiReq" : {
+        "orders": [
+            {
+                "orderID" : "<placeHolder>"
+            }
+        ]
+    }
+}

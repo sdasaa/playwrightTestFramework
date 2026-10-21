@@ -1,0 +1,106 @@
+name: This workflow is desgined to run the Playwright test using GH Actions
+
+on:
+    push: 
+        branches:
+            - main
+    pull_request: 
+        branches: 
+            - main
+    workflow_dispatch: 
+        inputs:
+            test_env:
+                description: Test Environment
+                required: true
+                type: choice
+                options:
+                    - QA1
+                    - QA2
+                default: QA1
+            test_suite:
+                description: Test suite to run
+                required: true
+                type: choice
+                options:
+                    - smoke
+                    - sanity
+                    - regression
+                default: smoke
+            test_feature:
+                description: Specific feature to be run
+                required: false
+                type: choice
+                options:
+                    - feature_1
+                    - feature_2
+                    - feature_3
+                default: ""
+            test_priority:
+                description: Priority of the tests to be executed
+                required: false
+                type: choice
+                options:
+                    - p1
+                    - p2
+                default: ""
+            cross_browser:
+                description: Execute the test suite in cross-browser env
+                required: false
+                type: boolean
+                default: false
+
+jobs:
+    executeTestSuite:
+        name: Executing the test suite with manual input params
+        runs-on: ubuntu-latest
+        if: github.event_name == 'workflow_dispatch' && inputs.cross_browser == false
+        environment: ${{ inputs.test_env }}
+        env:
+            # env to build run cmd
+            TEST_SUITE      : ${{ inputs.test_suite }}
+            TEST_FEATURE    : ${{ inputs.test_feature }}
+            TEST_PRIORITY   : ${{ inputs.test_priority }}
+            # env for the fwk to consume
+            BASE_URL        : ${{vars.BASE_URL}}
+            BASE_URL_API    : ${{vars.BASE_URL_API}}
+            USER_POOL       : ${{vars.USER_POOL}}
+            USER_PWD        : ${{secrets.USER_PWD}}
+            WORKERS         : ${{vars.WORKERS}}
+            HEADLESS        : ${{vars.HEADLESS}}
+            TIMEOUT_TEST    : ${{vars.TIMEOUT_TEST}}
+            TIMEOUT_EXPECT  : ${{vars.TIMEOUT_EXPECT}}
+            SCREENSHOTS     : ${{vars.SCREENSHOTS}}
+            VIDEO           : ${{vars.VIDEO}}
+            TRACES          : ${{vars.TRACES}}
+            RE_TRIES        : ${{vars.RE_TRIES}}
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: setup node env
+                uses: actions/setup-node@v4
+            
+            -   name: install dependencies
+                run: |
+                        npm ci
+            -   name: install Playwright browser-Chromium only
+                run: |
+                        npx playwright install chromium --with-deps
+            -   name: Build the cmd based on job inputs
+                id: cmdToExecute
+                run: |
+                        npx tsx .github/scripts/cmdBuilder.ts
+            -   name: Execute test
+                run: |
+                        ${{ steps.cmdToExecute }}
+            -   name: Archive results
+                if: always()
+                uses: actions/upload-artifact@v4
+                with:
+                    name: test-results
+                    path: 
+                        test-results
+                        allure-results
+
+
+

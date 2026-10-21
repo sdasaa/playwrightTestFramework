@@ -1,0 +1,10 @@
+{
+    "eventHubUser" : {
+        "userEmail": "event@eventhub.com", 
+        "userPassword": "Welcome@01"
+    },
+    "testUser" : {
+        "userEmail": "<placeHolder>", 
+        "userPassword": "Welcome1"
+    }
+}
