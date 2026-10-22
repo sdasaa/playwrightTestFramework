@@ -28,7 +28,5 @@ logger.info(cmdToExecute)
 
 const ghOutput=process.env['GITHUB_OUTPUT']
 
-if(ghOutput){
-
-    fs.appendFileSync(ghOutput, cmdToExecute)
-}
+if(ghOutput)
+    fs.appendFileSync(ghOutput, `cmdcmdToExecute=${cmdToExecute}`)

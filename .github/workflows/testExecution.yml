@@ -90,13 +90,13 @@ jobs:
                 run: |
                         npx playwright install chromium --with-deps
             -   name: Build the cmd based on job inputs
-                id: cmdToExecute
+                id: buildCmd
                 run: |
                         npx tsx .github/scripts/cmdBuilder.ts
-            -   name: Execute test
+            -   name: Start Test Execution
                 run: |
-                        echo `cmd to execute -> ${{ steps.cmdToExecute }}`
-                        ${{ steps.cmdToExecute }}
+                        echo `cmd to execute -> ${{ steps.buildCmd.outputs.cmdToExecute }}`
+                        ${{ steps.buildCmd.outputs.cmdToExecute }}
             -   name: Archive results
                 if: always()
                 uses: actions/upload-artifact@v4
