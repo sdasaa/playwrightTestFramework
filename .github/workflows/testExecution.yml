@@ -31,9 +31,10 @@ on:
                 required: false
                 type: choice
                 options:
-                    - feature_1
-                    - feature_2
-                    - feature_3
+                    -   ""
+                    -   feature_1
+                    -   feature_2
+                    -   feature_3
                 default: ""
             test_priority:
                 description: Priority of the tests to be executed
