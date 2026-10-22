@@ -94,6 +94,7 @@ jobs:
                         npx tsx .github/scripts/cmdBuilder.ts
             -   name: Execute test
                 run: |
+                        echo `cmd to execute -> ${{ steps.cmdToExecute }}`
                         ${{ steps.cmdToExecute }}
             -   name: Archive results
                 if: always()
