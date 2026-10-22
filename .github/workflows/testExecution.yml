@@ -53,12 +53,13 @@ on:
 
 jobs:
     executeTestSuite:
-        name: Executing the test suite with manual input params
+        name: Test Execution-Regular
         runs-on: ubuntu-latest
         if: github.event_name == 'workflow_dispatch' && inputs.cross_browser == false
         environment: ${{ inputs.test_env }}
         env:
             # env to build run cmd
+            TEST_ENV        : ${{ inputs.test_env}}
             TEST_SUITE      : ${{ inputs.test_suite }}
             TEST_FEATURE    : ${{ inputs.test_feature }}
             TEST_PRIORITY   : ${{ inputs.test_priority }}

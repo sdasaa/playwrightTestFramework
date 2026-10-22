@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import {logger} from '@utils/index'
 
-const ciGrepParams: string[] = ['test_suite', 'test_feature', 'test_priority']
+const ciGrepParams: string[] = ['TEST_SUITE', 'TEST_FEATURE', 'TEST_PRIORITY']
 const isCrossBrowser = process.env['cross_browser']
 let cmdToExecute = 'npx playwright test'
 
-if(!process.env['test_env'] || !process.env['test_suite']){
+if(!process.env['TEST_ENV'] || !process.env['TEST_SUITE']){
     logger.error('Mandatory env params test_env & test_suite is not set !')
     throw new Error('Unable to execute test, Provide mandatory params - test_env & test_suite')
 }
