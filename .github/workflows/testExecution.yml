@@ -3,10 +3,10 @@ name: Test Execution with Input Params
 on:
     push: 
         branches:
-            - main
+            -   main
     pull_request: 
         branches: 
-            - main
+            -   main
     workflow_dispatch: 
         inputs:
             test_env:
@@ -14,17 +14,17 @@ on:
                 required: true
                 type: choice
                 options:
-                    - QA1
-                    - QA2
+                    -   QA1
+                    -   QA2
                 default: QA1
             test_suite:
                 description: Test suite to run
                 required: true
                 type: choice
                 options:
-                    - smoke
-                    - sanity
-                    - regression
+                    -   smoke
+                    -   sanity
+                    -   regression
                 default: smoke
             test_feature:
                 description: Specific feature to be run
@@ -41,8 +41,9 @@ on:
                 required: false
                 type: choice
                 options:
-                    - p1
-                    - p2
+                    -   ""
+                    -   p1
+                    -   p2
                 default: ""
             cross_browser:
                 description: Execute the test suite in cross-browser env
