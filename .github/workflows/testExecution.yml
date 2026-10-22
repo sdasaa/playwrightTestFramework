@@ -1,4 +1,4 @@
-name: This workflow is desgined to run the Playwright test using GH Actions
+name: Test Execution with Input Params
 
 on:
     push: 
@@ -99,8 +99,9 @@ jobs:
                 with:
                     name: test-results
                     path: 
-                        test-results
-                        allure-results
+                        test-results/
+                        allure-results/
+
 
 
 
