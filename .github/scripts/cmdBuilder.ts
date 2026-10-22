@@ -1,20 +1,33 @@
 import * as fs from 'fs';
-import path from 'path';
+import {logger} from '@utils/index'
 
 const ciGrepParams: string[] = ['test_suite', 'test_feature', 'test_priority']
 const isCrossBrowser = process.env['cross_browser']
+let cmdToExecute = 'npx playwright test'
 
-console.log('################# Starting CMD building ###############')
-console.log(ciGrepParams.filter((param) => process.env[param] != undefined)
+if(!process.env['test_env'] || !process.env['test_suite']){
+    logger.error('Mandatory env params test_env & test_suite is not set !')
+    throw new Error('Unable to execute test, Provide mandatory params - test_env & test_suite')
+}
+
+logger.info('################# Starting CMD building ###############')
+
+logger.info(ciGrepParams.filter((param) => process.env[param] != undefined)
             .map( praram => `(?=.*@${process.env[praram]})`).join(""))
 
 let grepParams = ciGrepParams.filter((param) => process.env[param] != undefined)
-                    .map( praram => `(?=.*@${process.env[praram]})`).join("")
+                    .map( praram => `--grep (?=.*@${process.env[praram]})`).join("")
+
 if(isCrossBrowser === 'true'){
     grepParams += ` --project=${process.env['cbrowser']}`
 }
 
+cmdToExecute += ` ${grepParams}`
+logger.info(cmdToExecute)
+
 const ghOutput=process.env['GITHUB_OUTPUT']
 
-if(ghOutput)
-    fs.appendFileSync(ghOutput, grepParams)
+if(ghOutput){
+
+    fs.appendFileSync(ghOutput, cmdToExecute)
+}
