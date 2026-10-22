@@ -20,6 +20,7 @@
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.12.1",
     "winston": "^3.19.0",
-    "dotenv": "^17.2.4"
+    "dotenv": "^17.2.4",
+    "tsx": "^4.23.15"
   }
 }
