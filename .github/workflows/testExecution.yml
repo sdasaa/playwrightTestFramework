@@ -94,9 +94,11 @@ jobs:
                 run: |
                         npx tsx .github/scripts/cmdBuilder.ts
             -   name: Start Test Execution
+                env:
+                    CMD_TO_EXECUTE : ${{steps.buildCmd.outputs.cmdToExecute}}
                 run: |
-                        echo `cmd to execute -> ${{ steps.buildCmd.outputs.cmdToExecute }}`
-                        ${{ steps.buildCmd.outputs.cmdToExecute }}
+                        echo "cmd to execute -> ${CMD_TO_EXECUTE}"
+                        eval "${CMD_TO_EXECUTE}"
             -   name: Archive results
                 if: always()
                 uses: actions/upload-artifact@v4
