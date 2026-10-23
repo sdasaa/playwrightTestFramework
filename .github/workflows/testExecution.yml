@@ -97,7 +97,7 @@ jobs:
                 env:
                     CMD_TO_EXECUTE : ${{steps.buildCmd.outputs.cmdToExecute}}
                 run: |
-                        echo "cmd to execute -> ${CMD_TO_EXECUTE}"
+                        echo "###### Executing CMD -> ${CMD_TO_EXECUTE} ######"
                         eval "${CMD_TO_EXECUTE}"
             -   name: Archive results
                 if: always()
@@ -107,6 +107,7 @@ jobs:
                     path: 
                         test-results/
                         allure-results/
+                        playwright-report/
 
 
 

@@ -7,11 +7,11 @@ let cmdToExecute = 'npx playwright test'
 let grepParams = '--grep'
 
 if(!process.env['TEST_ENV'] || !process.env['TEST_SUITE']){
-    logger.error('Mandatory env params test_env & test_suite is not set !')
+    logger.error('Mandatory env params test_env & test_suite is not set! ')
     throw new Error('Unable to execute test, Provide mandatory params - test_env & test_suite')
 }
 
-logger.info('################# Starting CMD building ###############')
+logger.info('################# Starting CMD building #################')
 
 logger.info(ciGrepParams.filter((param) => process.env[param] != undefined)
             .map( praram => `(?=.*@${process.env[praram]})`).join(""))
@@ -24,9 +24,8 @@ if(isCrossBrowser === 'true'){
 }
 
 cmdToExecute += ` ${grepParams}`
-logger.info(cmdToExecute)
+logger.info(`Executing command -> ${cmdToExecute}`)
 
 const ghOutput=process.env['GITHUB_OUTPUT']
-
 if(ghOutput)
-    fs.appendFileSync(ghOutput, `cmdcmdToExecute=${cmdToExecute}`)
+    fs.appendFileSync(ghOutput, `cmdToExecute=${cmdToExecute}`)
