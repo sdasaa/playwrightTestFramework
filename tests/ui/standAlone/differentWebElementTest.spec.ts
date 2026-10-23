@@ -10,7 +10,6 @@ test.describe(`Suite-Test different webElements of RShetty-AutomationPractice`, 
 
     const title = "Practice Page"; 
     const instructor = "Rahul Shetty";
-    const ssFileToAttach = ".zObsolete/123.png";
 
     test(`Validating Alerts & handle them using page.on()`,
     {tag: [myTestTags.ui, myTestTags.smoke, myTestTags.standalone, myTestTags.p1], 
@@ -31,12 +30,6 @@ test.describe(`Suite-Test different webElements of RShetty-AutomationPractice`, 
             await testinfo.attach('Login ss', {
                 body: await page.screenshot(),
                 contentType : 'image/png',
-            })
-        })
-
-        await test.step(`Attaching ss from project path`, async () => {
-            testinfo.attach('fromPath', {
-                path : ssFileToAttach
             })
         })
 
