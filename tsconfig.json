@@ -50,8 +50,8 @@
       "@utils/*" : ["./utils/*"]
     } 
   },
-  //"include": ["**/*.ts", ".github/**/*.ts"],
-  "include": [".github/**/*.ts", "**/*.ts", ".zObsolete/login.api.spec.ts", ".zObsolete/skipLoginUsingSts.spec.ts", ".zObsolete/SkipLoginE2EShoppingFlow.spec.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [".github/**/*.ts", "**/*.ts"],
+  //"include": [".github/**/*.ts", "**/*.ts", ".zObsolete/login.api.spec.ts", ".zObsolete/skipLoginUsingSts.spec.ts", ".zObsolete/SkipLoginE2EShoppingFlow.spec.ts"],
+  "exclude": ["node_modules", "dist", ".zObsolete", "**/*.js", ]
 
 }

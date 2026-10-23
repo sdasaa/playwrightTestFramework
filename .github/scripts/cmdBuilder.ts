@@ -5,6 +5,7 @@ const ciGrepParams: string[] = ['TEST_SUITE', 'TEST_FEATURE', 'TEST_PRIORITY']
 const isCrossBrowser = process.env['cross_browser']
 let cmdToExecute = 'npx playwright test'
 let grepParams = `--grep '`
+const runOnChrome = '--project=chrome'
 
 if(!process.env['TEST_ENV'] || !process.env['TEST_SUITE']){
     logger.error('Mandatory env params test_env & test_suite is not set! ')
@@ -21,6 +22,8 @@ grepParams += ciGrepParams.filter((param) => process.env[param] != undefined && 
 
 if(isCrossBrowser === 'true'){
     grepParams += ` --project=${process.env['cbrowser']}`
+}else{
+    grepParams += ` ${runOnChrome}`
 }
 
 cmdToExecute += ` ${grepParams}`

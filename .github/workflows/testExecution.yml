@@ -82,6 +82,9 @@ jobs:
 
             -   name: setup node env
                 uses: actions/setup-node@v4
+                with:
+                    node-version: 25
+                    cache: "npm"
             
             -   name: install dependencies
                 run: |

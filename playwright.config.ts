@@ -66,12 +66,6 @@ const myPlaywrightTestConfig: PlaywrightTestConfig = {
       use : {
         ...devices['Desktop Firefox']
       }
-    },
-    {
-      name: 'api',
-      use : {
-        baseURL: myTestConfig.env.BASE_URL_API,
-      }
     }
   ]
 };
