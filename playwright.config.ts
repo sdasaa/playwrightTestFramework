@@ -22,9 +22,8 @@ const myPlaywrightTestConfig: PlaywrightTestConfig = {
   workers : myTestConfig.pwgt.WORKERS,
 
   reporter: myTestConfig.env.IS_CI ?
-            [ ['list'], ['json'], ['html'], ['allure-playwright']] :
-            [ ['list'], ['html'], ['allure-playwright']],
-
+            [ ['list'], ['html'], ['allure-playwright'], ['blob'] ]:
+            [ ['list'], ['html'], ['allure-playwright'] ],
   use: {
     
     baseURL: myTestConfig.env.BASE_URL,

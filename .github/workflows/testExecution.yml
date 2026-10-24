@@ -53,7 +53,7 @@ on:
 
 jobs:
     executeTestSuite:
-        name: Test Execution-Regular
+        name: Test Execution-Chrome
         runs-on: ubuntu-latest
         if: github.event_name == 'workflow_dispatch' && inputs.cross_browser == false
         environment: ${{ inputs.test_env }}
@@ -63,6 +63,7 @@ jobs:
             TEST_SUITE      : ${{ inputs.test_suite }}
             TEST_FEATURE    : ${{ inputs.test_feature }}
             TEST_PRIORITY   : ${{ inputs.test_priority }}
+            CROSS_BROWSER   : ${{ inputs.cross_browser}}
             # env for the fwk to consume
             BASE_URL        : ${{vars.BASE_URL}}
             BASE_URL_API    : ${{vars.BASE_URL_API}}
@@ -83,33 +84,148 @@ jobs:
             -   name: setup node env
                 uses: actions/setup-node@v4
                 with:
-                    node-version: 25
+                    node-version: 24
                     cache: "npm"
             
-            -   name: install dependencies
-                run: |
-                        npm ci
-            -   name: install Playwright browser-Chromium only
-                run: |
-                        npx playwright install chromium --with-deps
-            -   name: Build the cmd based on job inputs
+            -   name: install project dependencies
+                run: npm ci
+
+            -   name: install Playwright browsers-Chromium only
+                run: npx playwright install chromium --with-deps
+
+            -   name: Build Test Execution cmd with Job inputs
                 id: buildCmd
-                run: |
-                        npx tsx .github/scripts/cmdBuilder.ts
-            -   name: Start Test Execution
+                run: npx tsx .github/scripts/cmdBuilder.ts
+
+            -   name: Test Execution-Chrome
                 env:
                     CMD_TO_EXECUTE : ${{steps.buildCmd.outputs.cmdToExecute}}
                 run: |
-                        echo "###### Executing CMD -> ${CMD_TO_EXECUTE} ######"
+                        echo "Executing CMD ---> ${CMD_TO_EXECUTE}"
                         eval "${CMD_TO_EXECUTE}"
-            -   name: Archive results
+            
+            -   name: Generate allure-report
+                if: always()
+                run: npx allure generate --clean allure-reults
+
+            -   name: Archive Test Execution results 
                 if: always()
                 uses: actions/upload-artifact@v4
                 with:
-                    name: test-results
-                    path: 
+                    name: executionReport
+                    path: |
                         test-results/
+                        playwright-report/
+                        allure-results/
+                        allure-report/
 
+    executeCrossBrowserTestWithShards:
+        name: CrossBrowser Test Execution with shards
+        if: inputs.cross_browser == true
+        environment: ${{ inputs.test_env }}
+        env:
+            # env to build run cmd
+            TEST_ENV        : ${{ inputs.test_env}}
+            TEST_SUITE      : ${{ inputs.test_suite }}
+            TEST_FEATURE    : ${{ inputs.test_feature }}
+            TEST_PRIORITY   : ${{ inputs.test_priority }}
+            CROSS_BROWSER   : ${{ inputs.cross_browser }}
+            # env for the fwk to consume
+            BASE_URL        : ${{vars.BASE_URL}}
+            BASE_URL_API    : ${{vars.BASE_URL_API}}
+            USER_POOL       : ${{vars.USER_POOL}}
+            USER_PWD        : ${{secrets.USER_PWD}}
+            WORKERS         : ${{vars.WORKERS}}
+            HEADLESS        : ${{vars.HEADLESS}}
+            TIMEOUT_TEST    : ${{vars.TIMEOUT_TEST}}
+            TIMEOUT_EXPECT  : ${{vars.TIMEOUT_EXPECT}}
+            SCREENSHOTS     : ${{vars.SCREENSHOTS}}
+            VIDEO           : ${{vars.VIDEO}}
+            TRACES          : ${{vars.TRACES}}
+            RE_TRIES        : ${{vars.RE_TRIES}}
+        strategy:
+            matrix:
+                shard : [1, 2]
+                shardTotal : [2]
+                cbrowser: ['firefox', 'webkit']
+            fail-fast: true
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout-code
+                uses: actions/checkout@v4
+
+            -   name: Setup node-env
+                uses: actions/setup-node@v5
+                with:
+                    node-version: 24
+                    cache: "npm"
+
+            -   name: Install Project Dependencies
+                run: npm ci
+            
+            -   name: Install Playwright Browsers(all)
+                run: npx playwright install --with-deps
+            
+            -   name: Build Execution Command
+                id: cmdBuilderWithShards
+                run: npx tsx .github/scripts/cmdBuilder.ts
+            
+            -   name: Execute Tests with respective shards
+                env:
+                    CMD_TO_EXECUTE : ${{steps.cmdBuilderWithShards.outputs.cmdToExecute}}
+                run: |
+                        CMD_TO_EXECUTE="$CMD_TO_EXECUTE --project=${{matrix.cbrowser}} --shard=${{matrix.shard}}/${{matrix.shardTotal}}"
+                        echo "CMD_TO_EXECUTE ---> $CMD_TO_EXECUTE"
+                        eval "$CMD_TO_EXECUTE"
+
+            -   name: Upload test-results
+                uses: actions/upload-artifact@v4
+                with:
+                    name: shard-result-${{matrix.cbrowser}}-${{matrix.shard}}
+                    path: |
+                            test-results/
+                            playwright-report/
+                            allure-results/
+                            allure-report/
+                            blob-report/
+                    retention-days: 7
+            
+    generateShardReports:
+        name: Generate Reports for executeCrossBrowserTest_Shards run
+        if: inputs.cross_browser == true
+        needs: executeCrossBrowserTestWithShards
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout-code
+                uses: actions/checkout@v4
+
+            -   name: Setup node-env
+                uses: actions/setup-node@v5
+                with:
+                    node-version: 24
+                    cache: "npm"
+
+            -   name: Install Project Dependencies
+                run: npm ci
+
+            -   name: Download shard reports
+                uses: actions/download-artifact@v4
+                with:
+                    path: allShardReports
+                    pattern: shard-result-*
+                    merge-multiple: true
+
+            -   name: Generate Playwright Report
+                run: |
+                        npx playwright merge-reports --reporter html allShardReports/blob-report
+                        npx allure generate allShardReports/allure-results
+                    
+            -   name: Upload combined shard reports
+                uses: actions/upload-artifact@v4
+                with:
+                    name: playwright-report
+                    path: playwright-report
+                    retention-days: 7
 
 
 

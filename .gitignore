@@ -2,9 +2,11 @@
 node_modules
 
 # Reports
-allure-results*
+allure-results
+allure-report
 test-results
 playwright-report
+blob-report
 
 # Custom 
 .zObsolete

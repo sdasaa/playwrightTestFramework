@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test ./tests/api/loginApi.spec.ts",
-    "test:single" : "npx playwright test ./tests/ui/functional/standAlone/differentWebElementTest.spec.ts --project=chrome",
-    "test:singlePom" : "npx playwright test ./tests/ui/functional/pageObjects/E2EShoppingFlow.spec.ts --project=chrome",
-    "test:ui:localChrome": "npx playwright test ./tests/ui/functional/pageObjects/E2EShoppingFlow.spec.ts --project=localChromeBrowser",
+    "test:single" : "npx playwright test ./tests/ui/standAlone/differentWebElementTest.spec.ts --project=chrome",
+    "test:singlePom" : "npx playwright test ./tests/ui/pageObjects/E2EShoppingFlow.spec.ts --project=chrome",
+    "test:ui:localChrome": "npx playwright test ./tests/ui/pageObjects/E2EShoppingFlow.spec.ts --project=localChromeBrowser",
     "test:api:auth": "npx playwright test ./tests/api/authApi.spec.ts --project=api"
   },
   "keywords": [],
